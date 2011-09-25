@@ -11,6 +11,11 @@ def reload_modules():
 		f(bot)
 	bot.clear_rules()
 
+	import sys
+	for mod in sys.modules.keys():
+		if mod.startswith('bot.modules.'):
+			del sys.modules[mod]
+
 	reload(modules)
 
 from . import modules
