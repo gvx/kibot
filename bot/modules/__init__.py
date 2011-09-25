@@ -10,7 +10,6 @@ module_list = [splitext(basename(x))[0] for x in iglob(join(dirname(__file__), '
 
 for name in module_list:
 	if name != '__init__':
-		print name
 		__import__('bot.modules.' + name, globals(), locals(), [], -1)
 
 del iglob, dirname, join, splitext, basename
