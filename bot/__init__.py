@@ -6,4 +6,12 @@ import json
 bot = Bot('Kibot')
 auth = Auth()
 
-from .modules import *
+def reload_modules():
+	for f in bot.quit_regs:
+		f(bot)
+	bot.clear_rules()
+
+	reload(modules)
+
+from . import modules
+

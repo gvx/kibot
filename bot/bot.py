@@ -16,11 +16,13 @@ class LineData(object):
 class Bot(object):
 	def __init__(self, name='aibot'):
 		self.name = name
+		self.clear_rules()
+		self.has_quit = False
+		self.last_channel = None
+	def clear_rules(self):
 		self.rules = []
 		self.quit_regs = []
 		self.regs = {'JOIN': [], 'PART': [], 'QUIT': []}
-		self.has_quit = False
-		self.last_channel = None
 	def connect(self, server, port):
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.connect((server, port))
