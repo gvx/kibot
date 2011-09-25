@@ -8,7 +8,7 @@ class LineData(object):
 		frags = line.strip().split(' ', 3)
 		if frags:
 			if frags[1] == 'QUIT':
-				return frags[0][1:].split('!',1)[0].title(), '*', frags[2] + ' ' + frags[3], frags[1]
+				return frags[0][1:].split('!',1)[0].title(), '*', len(frags) > 3 and frags[2] + ' ' + frags[3] or frags[2], frags[1]
 			return frags[0][1:].split('!',1)[0].title(), frags[2].title(), len(frags) > 3 and frags[3][1:] or '', frags[1]
 		else:
 			return '', '', '', ''
@@ -22,6 +22,8 @@ class Bot(object):
 	def clear_rules(self):
 		self.rules = []
 		self.quit_regs = []
+		self.join_regs = []
+		self.users = {}
 		self.regs = {'JOIN': [], 'PART': [], 'QUIT': []}
 	def connect(self, server, port):
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -84,6 +86,20 @@ class Bot(object):
 		elif linedata.action in self.regs:
 			for f in self.regs[linedata.action]:
 				f(self, linedata)
+		elif linedata.action == '353':
+			channel, names = linedata.line.lstrip().split(':', 1)
+			if channel not in self.users:
+				self.users[channel] = []
+			self.users[channel].extend(name.lstrip('@') for name in names.split())
+		elif linedata.action == '366':
+			channel = '#' + linedata.line.lstrip().split(':', 1)[0]
+			if channel in self.users:
+				users = self.users[channel]
+				del self.users[channel]
+			else:
+				users = []
+			for f in self.join_regs:
+				f(self, channel, users)
 	def preregister(self, rule, multi=False):
 		def k(f):
 			self.rules.insert(0, (f, rule, multi))
@@ -107,4 +123,5 @@ class Bot(object):
 		self.regs['QUIT'].append(f)
 		return f
 	def register_joinschannel(self, f):
-		pass
+		self.join_regs.append(f)
+		return f
