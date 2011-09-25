@@ -23,6 +23,7 @@ class Bot(object):
 		self.rules = []
 		self.quit_regs = []
 		self.join_regs = []
+		self.connect_regs = []
 		self.users = {}
 		self.regs = {'JOIN': [], 'PART': [], 'QUIT': []}
 	def connect(self, server, port):
@@ -50,6 +51,8 @@ class Bot(object):
 		for f in self.quit_regs:
 			f(self)
 	def wait(self):
+		for f in self.connect_regs:
+			f(self)
 		try:
 			while not self.has_quit:
 				self.act()
@@ -124,4 +127,7 @@ class Bot(object):
 		return f
 	def register_joinschannel(self, f):
 		self.join_regs.append(f)
+		return f
+	def register_connects(self, f):
+		self.connect_regs.append(f)
 		return f

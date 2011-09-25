@@ -2,7 +2,7 @@ from .. import bot, auth, json
 
 import random
 
-quotes = {'flipvanrijn': ["Nu associeer ik BJ met m'n moeder"]}
+quotes = {}
 log = {}
 
 try:
