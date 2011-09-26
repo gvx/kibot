@@ -4,7 +4,7 @@ from auth import Auth
 import json
 
 bot = Bot('Kibot')
-auth = Auth()
+auth = Auth(bot)
 
 def reload_modules():
 	for f in bot.quit_regs:

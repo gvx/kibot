@@ -25,7 +25,7 @@ class Bot(object):
 		self.join_regs = []
 		self.connect_regs = []
 		self.users = {}
-		self.regs = {'JOIN': [], 'PART': [], 'QUIT': []}
+		self.regs = {'JOIN': [], 'PART': [], 'QUIT': [], 'NOTICE': []}
 	def connect(self, server, port):
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.connect((server, port))
@@ -124,6 +124,9 @@ class Bot(object):
 		return f
 	def register_quit(self, f):
 		self.regs['QUIT'].append(f)
+		return f
+	def register_notice(self, f):
+		self.regs['NOTICE'].append(f)
 		return f
 	def register_joinschannel(self, f):
 		self.join_regs.append(f)
