@@ -12,9 +12,15 @@ class Auth(object):
 			self.callbacks.pop(0)(False)
 		elif linedata.line.startswith("Last seen"):
 			self.callbacks.pop(0)("now" in linedata.line)
-	def required(self, f):
+	def checked(self, f):
 		@wraps(f)
 		def wrapper(bot, linedata, *args):
 			self.check(linedata.sender)
 			self.callbacks.append(lambda x: f(bot, linedata, x, *args))
+		return wrapper
+	def required(self, f):
+		@wraps(f)
+		def wrapper(bot, linedata, *args):
+			self.check(linedata.sender)
+			self.callbacks.append(lambda x: x and f(bot, linedata, *args))
 		return wrapper

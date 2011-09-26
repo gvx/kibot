@@ -20,20 +20,19 @@ except IOError:
 
 @bot.register(r'\[\[(.*)\]\]:=(.*)')
 @auth.required
-def define_wiki(bot, linedata, authed, matches):
-	if authed:
-		name, text = matches
-		if name in wiki:
-			wiki[name].modify(linedata.sender, text)
-		else:
-			wiki[name] = WikiEntry(linedata.sender, text)
-	return True
+def define_wiki(bot, linedata, matches):
+	name, text = matches
+	if name in wiki:
+		wiki[name].modify(linedata.sender, text)
+	else:
+		wiki[name] = WikiEntry(linedata.sender, text)
 
 @bot.register(r'\[\[(.*?)\]\]', multi=True)
 def show_wiki(bot, linedata, matches):
-	for match in matches:
-		if match in wiki:
-			bot.reply(wiki[match].text, linedata)
+	if "]]:=" not in linedata.line:
+		for match in matches:
+			if match in wiki:
+				bot.reply(wiki[match].text, linedata)
 
 @bot.register_atexit
 def save_json(bot):

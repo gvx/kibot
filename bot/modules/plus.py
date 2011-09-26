@@ -10,14 +10,13 @@ except IOError:
 
 @bot.register(r'\+1 (.*)')
 @auth.required
-def plus_one(bot, linedata, authed, matches):
-	if authed:
-		s = matches[0]
-		if s != linedata.sender:
-			if s not in plusses:
-				plusses[s] = 1
-			else:
-				plusses[s] += 1
+def plus_one(bot, linedata, matches):
+	s = matches[0]
+	if s != linedata.sender:
+		if s not in plusses:
+			plusses[s] = 1
+		else:
+			plusses[s] += 1
 
 @bot.register(r'hoeveel punten (.*)')
 def plus_what(bot, linedata, matches):

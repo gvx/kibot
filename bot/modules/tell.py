@@ -23,15 +23,14 @@ def do_tell(bot, linedata, match=None):
 
 @bot.register("[Zz]eg (.*?) (.*)")
 @auth.required
-def add_tell(bot, linedata, authed, matches):
-	if authed:
-		r = matches[0].title()
-		msg = matches[1]
-		s = linedata.sender
-		private = linedata.receiver.title() == bot.name.title()
-		if r not in messages:
-			messages[r] = []
-		messages[r].append((s, private, msg))
+def add_tell(bot, linedata, matches):
+	r = matches[0].title()
+	msg = matches[1]
+	s = linedata.sender
+	private = linedata.receiver.title() == bot.name.title()
+	if r not in messages:
+		messages[r] = []
+	messages[r].append((s, private, msg))
 
 @bot.register_atexit
 def save_json(bot):
