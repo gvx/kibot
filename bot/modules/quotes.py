@@ -21,14 +21,15 @@ def log_data(bot, linedata, match):
 		log[s].pop(0)
 
 @bot.register(r'\+Q <(.*?)> (.*)')
-def add_quote(bot, linedata, matches):
-	m = matches[1].strip()
-	s = matches[0].title()
-	print(s, s in log)
-	if s in log and m in log[s]:
-		if s not in quotes:
-			quotes[s] = []
-		quotes[s].append(m)
+@auth.required
+def add_quote(bot, linedata, authed, matches):
+	if authed:
+		m = matches[1].strip()
+		s = matches[0].title()
+		if s in log and m in log[s]:
+			if s not in quotes:
+				quotes[s] = []
+			quotes[s].append(m)
 
 @bot.register(r'\?Q (.*)')
 def show_quote(bot, linedata, matches):

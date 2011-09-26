@@ -19,12 +19,14 @@ except IOError:
 	pass
 
 @bot.register(r'\[\[(.*)\]\]:=(.*)')
-def define_wiki(bot, linedata, matches):
-	name, text = matches
-	if name in wiki:
-		wiki[name].modify(linedata.sender, text)
-	else:
-		wiki[name] = WikiEntry(linedata.sender, text)
+@auth.required
+def define_wiki(bot, linedata, authed, matches):
+	if authed:
+		name, text = matches
+		if name in wiki:
+			wiki[name].modify(linedata.sender, text)
+		else:
+			wiki[name] = WikiEntry(linedata.sender, text)
 	return True
 
 @bot.register(r'\[\[(.*?)\]\]', multi=True)
