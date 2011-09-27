@@ -6,9 +6,10 @@ last = {}
 
 @bot.preregister()
 def log_last(bot, linedata, match):
-	last[linedata.sender] = (time.gmtime(), linedata.line)
+	if linedata.receiver != bot.name:
+		last[linedata.sender] = (time.localtime(), linedata.line)
 
-@bot.register("[Ww]at zei (.*)\??")
+@bot.register(r"[Ww]at zei (.*?)\??$")
 def log_last(bot, linedata, matches):
 	s = matches[0]
 	if s in last:
