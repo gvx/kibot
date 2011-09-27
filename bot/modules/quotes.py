@@ -1,15 +1,9 @@
-from .. import bot, auth, json
+from .. import bot, auth, persist
 
 import random
 
-quotes = {}
+quotes = persist('quotes.db')
 log = {}
-
-try:
-	with open('quotes.db') as f:
-		quotes = json.load(f)
-except IOError:
-	pass
 
 @bot.preregister('.*')
 def log_data(bot, linedata, match):
@@ -41,8 +35,3 @@ def show_quote(bot, linedata, matches):
 			for quote in quotelist:
 				if s in quote.lower():
 					bot.reply('<' + k + '> ' + quote, linedata)
-
-@bot.register_atexit
-def save_json(bot):
-	with open('quotes.db', 'w') as f:
-		json.dump(quotes, f)

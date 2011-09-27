@@ -1,10 +1,10 @@
 from bot import Bot
 from auth import Auth
 
-import json
-
 bot = Bot('Kibot')
 auth = Auth(bot)
+
+from persist import persist, json
 
 def reload_modules():
 	for f in bot.quit_regs:

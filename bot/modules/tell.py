@@ -1,13 +1,6 @@
-from .. import bot, auth, json
+from .. import bot, auth, persist
 
-messages = {}
-
-try:
-	with open('messages.db') as f:
-		messages = json.load(f)
-except IOError:
-	pass
-
+messages = persist('messages.db')
 
 @bot.preregister(".*")
 @bot.register_join
@@ -31,8 +24,3 @@ def add_tell(bot, linedata, matches):
 	if r not in messages:
 		messages[r] = []
 	messages[r].append((s, private, msg))
-
-@bot.register_atexit
-def save_json(bot):
-	with open('messages.db', 'w') as f:
-		json.dump(messages, f)
