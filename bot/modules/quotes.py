@@ -35,6 +35,12 @@ def show_quote(bot, linedata, matches):
 	s = matches[0].title()
 	if s in quotes:
 		bot.reply('<' + matches[0] + '> ' + random.choice(quotes[s]), linedata)
+	else: #quote search
+		s = matches[0].lower()
+		for k, quotelist in quotes.iteritems():
+			for quote in quotelist:
+				if s in quote.lower():
+					bot.reply('<' + k + '> ' + quote, linedata)
 
 @bot.register_atexit
 def save_json(bot):
