@@ -82,7 +82,7 @@ class Bot(object):
 		print linedata.action, '|', linedata.sender, '->', linedata.receiver, ':', linedata.line
 		if linedata.line and linedata.action == 'PRIVMSG':
 			for f, rule, multi in self.rules:
-				match = (multi and re.findall or Bot.match)(rule, linedata.line)
+				match = rule is None or (multi and re.findall or Bot.match)(rule, linedata.line)
 				if match:
 					if f(self, linedata, match):
 						break
@@ -103,12 +103,12 @@ class Bot(object):
 				users = []
 			for f in self.join_regs:
 				f(self, channel, users)
-	def preregister(self, rule, multi=False):
+	def preregister(self, rule=None, multi=False):
 		def k(f):
 			self.rules.insert(0, (f, rule, multi))
 			return f
 		return k
-	def register(self, rule, multi=False):
+	def register(self, rule=None, multi=False):
 		def k(f):
 			self.rules.append((f, rule, multi))
 			return f
