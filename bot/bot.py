@@ -35,6 +35,8 @@ class Bot(object):
 	def join(self, channel):
 		self.send('JOIN', channel)
 		self.last_channel = channel
+	def part(self, channel):
+		self.send('PART', channel)
 	def reply(self, msg, linedata):
 		if linedata.receiver == self.name:
 			self.say(msg, linedata.sender)

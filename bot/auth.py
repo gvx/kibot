@@ -1,5 +1,13 @@
 from functools import wraps
 
+import json
+
+try:
+	with open('admins.db') as f:
+		admins = set(json.load(f))
+except IOError:
+	admins = set()
+
 class Auth(object):
 	def __init__(self, bot):
 		self.bot = bot
@@ -23,4 +31,10 @@ class Auth(object):
 		def wrapper(bot, linedata, *args):
 			self.check(linedata.sender)
 			self.callbacks.append(lambda x: x and f(bot, linedata, *args))
+		return wrapper
+	def admin(self, f):
+		@wraps(f)
+		def wrapper(bot, linedata, *args):
+			if linedata.sender in admins:
+				f(bot, linedata, *args)
 		return wrapper
