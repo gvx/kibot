@@ -32,8 +32,10 @@ class Bot(object):
 		self.send('NICK', self.name)
 		self.send('USER', self.name, self.name, self.name, ':Kibot Junior')
 	def join(self, channel):
+		print 'JOIN |', channel, '<-', self.name
 		self.send('JOIN', channel)
 	def part(self, channel):
+		print 'PART |', channel, '<-', self.name
 		self.send('PART', channel)
 	def reply(self, msg, linedata):
 		if linedata.receiver == self.name:
