@@ -18,7 +18,6 @@ class Bot(object):
 		self.name = name
 		self.clear_rules()
 		self.has_quit = False
-		self.last_channel = None
 	def clear_rules(self):
 		self.rules = []
 		self.quit_regs = []
@@ -34,7 +33,6 @@ class Bot(object):
 		self.send('USER', self.name, self.name, self.name, ':Kibot Junior')
 	def join(self, channel):
 		self.send('JOIN', channel)
-		self.last_channel = channel
 	def part(self, channel):
 		self.send('PART', channel)
 	def reply(self, msg, linedata):
@@ -42,9 +40,9 @@ class Bot(object):
 			self.say(msg, linedata.sender)
 		else:
 			self.say(msg, linedata.receiver)
-	def say(self, msg, to=None):
+	def say(self, msg, to):
 		print 'PRIVMSG |', to, '<-', self.name, ':', msg
-		self.send('PRIVMSG', to or self.last_channel, ':'+msg)
+		self.send('PRIVMSG', to, ':'+msg)
 	def send(self, *msg):
 		self.socket.send(' '.join(msg)+'\r\n')
 	def quit(self):
